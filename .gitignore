@@ -1,0 +1,14 @@
+.idea/
+.ipynb*
+.Rproj*
+__pycache__/
+*.numbers
+*.aux
+*.log
+*.out
+*.gz
+*.fls
+*.fdb_latexmk
+.DS_Store
+CV/Summary*
+CV/Data*
