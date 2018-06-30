@@ -26,7 +26,7 @@ Once the data are formatted properly, they are written out to `.tex` files, that
 
 ## Notes:
 
-1. I keep track conference presentations separate from lectures and seminars. But apparently, these are considered the same thing in the UCSB biobib universe. So, when building the `Lectures.tex` file, I have to side-load the `Conference Abstract-Table.csv` during initialization of the `Lecture` object (cf. L401-404 in `tables.py`). This is super janky, but it works.
+1. I keep track of conference presentations separate from lectures and seminars. But apparently, these are considered the same thing in the UCSB biobib universe. So, when building the `Lectures.tex` file, I have to side-load the `Conference Abstract-Table.csv` during initialization of the `Lecture` object (cf. L401-404 in `tables.py`). This is super janky, but it works.
 
 2. While I tired to make the `tables.py` structure general and extensible, it's not really well factored, so there is a fair amount of repetition related to cleaning up dataframes and formating of table output.
 
