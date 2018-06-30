@@ -30,7 +30,9 @@ Once the data are formatted properly, they are written out to `.tex` files, that
 
 2. While I tired to make the `tables.py` structure general and extensible, it's not really well factored, so there is a fair amount of repetition related to cleaning up dataframes and formating of table output.
 
-3. Pull requests welcome. 
+3. This effort was inspired by Stuart Sweeney's similar system for generating biobib files using R scripts. 
+
+4. Pull requests welcome. 
 
 
 
