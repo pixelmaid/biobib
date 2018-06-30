@@ -19,10 +19,10 @@ courses_file = 'CV/Teaching-Table.csv'
 Courses(csv_file=courses_file, name='Courses').write_table(path=path)
 
 from tables import GraduateAdvising
-graduate_ms_file = 'CV/Graduate MA MS-Table 1.csv'
+graduate_ms_file = 'CV/Graduate MA MS-Table.csv'
 GraduateAdvising(csv_file=graduate_ms_file,
                  name='GraduateAdvisingMS').write_table(path=path)
-graduate_phd_file = 'CV/Graduate PhD-Table 1.csv'
+graduate_phd_file = 'CV/Graduate PhD-Table.csv'
 GraduateAdvising(csv_file=graduate_phd_file,
                  name='GraduateAdvisingPhD').write_table(path=path)
 

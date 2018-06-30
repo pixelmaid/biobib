@@ -396,7 +396,7 @@ class Lectures(Table):
         super(Lectures, self).__init__(name=name, csv_file=csv_file)
         self.header_columns = ['Month/Year', 'Topic', 'Place/Conference']
         self.description = "UC Bio-bib Lectures Table"
-        self.proceedings_file = 'CV/Conference Abstracts-Table 1.csv'
+        self.proceedings_file = 'CV/Conference Abstracts-Table.csv'
         self.cumulative = cumulative
         self.conferences = Proceedings(
             csv_file=self.proceedings_file,
