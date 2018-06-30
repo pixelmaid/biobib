@@ -12,4 +12,6 @@ __pycache__/
 .DS_Store
 CV/Summary*
 CV/Data*
+CV/Biography*
+CV/Appointments*
 self*
