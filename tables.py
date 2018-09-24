@@ -320,6 +320,35 @@ class Courses(Table):
         return row
 
 
+class MESM(Table):
+
+    def __init__(self, name='MESMProject', csv_file=None, cumulative=False):
+        super(Courses, self).__init__(name=name, csv_file=csv_file)
+        self.header_columns = ['Year', 'Project Title', 'Students',
+                               'Q3', 'Q4', 'Q5', 'Q7']
+        self.description = "UC Bio-bib MESM Projects Table"
+        self.cumulative = cumulative
+        self.df = self.clean_df()
+
+    def begin_super_tabular(self):
+        # \begin{supertabular}{lp{6.5cm}lrrrc}
+        return "\\begin{supertabular}{lp{6.5cm}lllcccc}\n"
+
+    def make_row(self, this_row):
+        row = ""
+        row += "{year} & {title} & {students} & {Q3} & {Q4} & {Q5} & {Q7} ".format(  # NOQA
+                            year=tex_escape(this_row['year']),
+                            title=tex_escape(str(this_row['title'])),
+                            students=tex_escape(this_row['students']),
+                            Q3=tex_escape(this_row['Q3']),
+                            Q4=tex_escape(this_row['Q4']),
+                            Q5=tex_escape(this_row['Q5']),
+                            Q7=tex_escape(this_row['Q7']),
+                        )
+        row += "\\\\"
+        return row
+
+
 class GraduateAdvising(Table):
 
     def __init__(self, name='GraduateAdvising', csv_file=None):
