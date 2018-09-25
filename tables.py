@@ -9,6 +9,17 @@ Categories = {
 }
 
 
+def make_cell(text, size=''):
+    """
+        wrap text in a makecell
+    """
+    # split text by commas:
+    text = ''.join([x + ',\\\\' for x in text.split(',')])
+    text = text[:-3]
+    text = "{" + size + " \\makecell{ " + text + "} }"
+    return text
+
+
 def tex_escape(text):
     """
         :param text: a plain text message
@@ -214,7 +225,7 @@ class Publications(Table):
         # Step 2: Concatenate authors into a single list, making sure to drop
         # empty author columns
         df['authors'] = list(
-            pd.Series(df[['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11']]
+            pd.Series(df[['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11']]  # NOQA
                       .fillna('').values.tolist())
             .apply(lambda x: [i for i in x if i != ''])
             .apply(lambda x: ', '.join(x))
@@ -323,7 +334,7 @@ class Courses(Table):
 class MESM(Table):
 
     def __init__(self, name='MESMProject', csv_file=None, cumulative=False):
-        super(Courses, self).__init__(name=name, csv_file=csv_file)
+        super(MESM, self).__init__(name=name, csv_file=csv_file)
         self.header_columns = ['Year', 'Project Title', 'Students',
                                'Q3', 'Q4', 'Q5', 'Q7']
         self.description = "UC Bio-bib MESM Projects Table"
@@ -332,18 +343,23 @@ class MESM(Table):
 
     def begin_super_tabular(self):
         # \begin{supertabular}{lp{6.5cm}lrrrc}
-        return "\\begin{supertabular}{lp{6.5cm}lllcccc}\n"
+        return "\\begin{supertabular}{lp{2.5cm}p{3cm}p{2cm}p{2cm}p{2cm}p{2cm}}\n"
 
     def make_row(self, this_row):
         row = ""
         row += "{year} & {title} & {students} & {Q3} & {Q4} & {Q5} & {Q7} ".format(  # NOQA
-                            year=tex_escape(this_row['year']),
-                            title=tex_escape(str(this_row['title'])),
-                            students=tex_escape(this_row['students']),
+                            year=tex_escape(this_row['Year']),
+                            title=tex_escape(str(this_row['Project Title'])),
+                            students=tex_escape(this_row['Students']),
+                            # students=make_cell(tex_escape(this_row['Students']), size="\\small"),  # NOQA
                             Q3=tex_escape(this_row['Q3']),
                             Q4=tex_escape(this_row['Q4']),
                             Q5=tex_escape(this_row['Q5']),
-                            Q7=tex_escape(this_row['Q7']),
+                            Q7=tex_escape(this_row['Q7'])
+                            # Q3=make_cell(tex_escape(this_row['Q3']), size="\\footnotesize"),  # NOQA
+                            # Q4=make_cell(tex_escape(this_row['Q4']), size="\\footnotesize"),  # NOQA
+                            # Q5=make_cell(tex_escape(this_row['Q5']), size="\\footnotesize"),  # NOQA
+                            # Q7=make_cell(tex_escape(this_row['Q7']), size="\\footnotesize"),  # NOQA
                         )
         row += "\\\\"
         return row

@@ -18,8 +18,8 @@ from tables import Courses
 courses_file = 'CV/Teaching-Table.csv'
 Courses(csv_file=courses_file, name='Courses').write_table(path=path)
 
-from tables import MESMProjects
-project_File = 'CV/MESM-Projects.csv'
+from tables import MESM
+project_file = 'CV/MESM Projects-Table.csv'
 MESM(csv_file=project_file, name='MESMProjects').write_table(path=path)
 
 from tables import GraduateAdvising
