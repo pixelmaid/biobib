@@ -5,7 +5,9 @@ import re
 
 Categories = {
     'RA': 'Refereed Article',
-    'CA': 'Conference Abstract'
+    'CA': 'Conference Abstract',
+    'BC': 'Refereed Book Chapter',
+    'CP': 'Refereed Conference Proceedings'
 }
 
 
@@ -62,11 +64,20 @@ def str_join(df, sep, *cols):
                   [df[col] for col in cols])
 
 
+def colonify(string):
+    if string:
+        return ": " + string
+    else:
+        return ""
+
+
 class Table:
 
     def __init__(self, name=None, csv_file=None):
         self.name = name
         self.df = pd.read_csv(csv_file)
+        self.columns = ""
+        self.type = "longtable"
         # self.df = self.clean_df()
 
     def clean_df(self):
@@ -74,9 +85,10 @@ class Table:
 
     def make_header(self):
         line = ""
-        line += "\\tablehead{"
-        line += ' & '.join(self.header_columns)
-        line += "\\\\ \\hline}\n"
+        # line += "\\tablehead{"
+        line += ' & '.join(self.header_columns) + "\\\\\n"
+        line += "\\hline \n"
+        line += "\\endhead \n"
         return line
 
     def make_rows(self):
@@ -88,24 +100,47 @@ class Table:
         else:
             return ''
 
+    def begin_table(self):
+        if self.type is "super_tabular":
+            return self.begin_super_tabular()
+        elif self.type is "longtable":
+            return self.begin_longtable()
+
+    def end_table(self):
+        if self.type is "super_tabular":
+            return self.end_super_tabular()
+        elif self.type is "longtable":
+            return self.end_longtable()
+
     def make_row(self, row=None):
         """ This function is specific to each Table """
         raise NotImplementedError
 
     def begin_super_tabular(self):
-        """ This function is specific to each Table, but we have a default """
-        return "\\begin{supertabuler}\n"
+        """ This function is generalized to use columns defined in each table """  # NOQA
+        return "\\begin{supertabular}" + self.columns + "\n"
 
     def end_super_tabular(self):
         return "\\end{supertabular}\n"
 
+    def begin_longtable(self):
+        """ This function is generalized to use columns defined in each table """  # NOQA
+        return "\\begin{longtable}" + self.columns + "\n"
+
+    def end_longtable(self):
+        return "\\end{longtable}\n"
+
     def make_table(self):
         table = ""
+        table += self.begin_table()
         table += self.make_header()
-        table += self.begin_super_tabular()
+        # table += self.begin_super_tabular()
+        # table += self.begin_longtable()
         table += self.make_rows()
         table += "\n"
-        table += self.end_super_tabular()
+        # table += self.end_super_tabular()
+        # table += self.end_longtable()
+        table += self.end_table()
         return table
 
     def write_table(self, path=None):
@@ -139,6 +174,8 @@ class Service(Table):
         self.description = "UC Bio-bib Sevice Table"
         self.cumulative = cumulative
         self.category = category
+        self.type = "longtable"
+        self.columns = "{lp{15cm}}"
         self.df = self.clean_df()
 
     def clean_df(self):
@@ -151,8 +188,8 @@ class Service(Table):
         df = df.sort_values(by=['Year'], ascending=[True])
         return df
 
-    def begin_super_tabular(self):
-        return "\\begin{supertabular}{lp{15cm}} \n"
+    # def begin_super_tabular(self):
+    #    return "\\begin{supertabular}{lp{15cm}} \n"
 
     def make_row(self, this_row):
         row = ""
@@ -174,7 +211,8 @@ class ProfessionalService(Service):
             category='P',
             cumulative=False):
         super(ProfessionalService, self).__init__(
-            name=name, csv_file=csv_file, category=category, cumulative=cumulative)
+            name=name, csv_file=csv_file,
+            category=category, cumulative=cumulative)
         self.description = "UC Bio-bib Professional Service Table"
         self.category = category
 
@@ -188,7 +226,8 @@ class UniversityService(Service):
             category='U',
             cumulative=False):
         super(UniversityService, self).__init__(
-            name=name, csv_file=csv_file, category=category, cumulative=cumulative)
+            name=name, csv_file=csv_file,
+            category=category, cumulative=cumulative)
         self.description = "UC Bio-bib University Service Table"
         self.category = category
 
@@ -202,7 +241,8 @@ class DepartmentalService(Service):
             category='D',
             cumulative=False):
         super(DepartmentalService, self).__init__(
-            name=name, csv_file=csv_file, category=category, cumulative=cumulative)
+            name=name, csv_file=csv_file,
+            category=category, cumulative=cumulative)
         self.description = "UC Bio-bib Departmental Service Table"
         self.category = category
 
@@ -217,6 +257,8 @@ class Publications(Table):
         self.category = category
         self.cumulative = True  # Always provide complete publication list
         self.df = self.clean_df()
+        self.type = "longtable"
+        self.columns = "{lcp{7.75cm}>{\\raggedright}p{5.25cm}p{1.75cm}}"
 
     def clean_df(self):
         df = self.df
@@ -225,23 +267,39 @@ class Publications(Table):
         # Step 2: Concatenate authors into a single list, making sure to drop
         # empty author columns
         df['authors'] = list(
-            pd.Series(df[['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11']]  # NOQA
+            pd.Series(df[['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12', 'A13']]  # NOQA
+                      .fillna('').values.tolist())
+            .apply(lambda x: [i for i in x if i != ''])
+            .apply(lambda x: ', '.join(x))
+        )
+        df['editors'] = list(
+            pd.Series(df[['E1', 'E2', 'E3', 'E4']]  # NOQA
                       .fillna('').values.tolist())
             .apply(lambda x: [i for i in x if i != ''])
             .apply(lambda x: ', '.join(x))
         )
         # Step 3: Cast DOI as a string and remove nan
         df.loc[df['DOI'] == 'nan', 'DOI'] = np.nan
+
+        # Step 4: Cast Pages as a string and remove nan
+        df.loc[df['PAGES'] == 'nan', 'PAGES'] = np.nan
+
+        # Step 5: Cast Volume as a string and remove nan
+        df.loc[df['VOL'] == 'nan', 'VOL'] = np.nan
+
         return df
 
-    def href(self, this_doi):
+    def doi(self, this_doi):
         if this_doi is np.NaN:
             return ""
         else:
-            return "[\\url{{ https://doi.org/{doi} }}]".format(doi=this_doi)
+            return "doi:{doi}.".format(doi=this_doi)
 
-    def begin_super_tabular(self):
-        return "\\begin{supertabular}{lcp{8.25cm}p{4.75cm}p{1.75cm}}\n"
+    def href(self, this_href):
+        if this_href is np.NaN:
+            return ""
+        else:
+            return "\\href{{{href}}}{{[pdf]}}".format(href=this_href)
 
     def make_rows(self):
         rows = []
@@ -251,19 +309,52 @@ class Publications(Table):
             rows.append(self.make_row(row))
         rows[-1] += '\\hline'
         rows[-1] += '\\hline'
+        rows[-1] += "   &   & {\\bf Since Appointment:} &    &   \\\\"
         for index, row in new.iterrows():
             rows.append(self.make_row(row))
         return '\n'.join(rows)
 
-    def make_row(self, this_row):
+    def make_row(self, row):
+        if row['Type'] == 'RA':
+            return self.make_article(row)
+        elif row['Type'] == 'BC':
+            return self.make_chapter(row)
+        elif row['Type'] == 'CP':
+            return self.make_chapter(row)
+
+    def make_article(self, this_row):
         row = ""
-        row += "{code} & {year} & {{\\bf {title}}}, {authors} {href} & \\emph{{ {journal} }} & {category}".format(
+        row += "{code} & {year} & {{\\bf {title}}}, {authors}. {href} & \\emph{{ {publisher} }} {volume}{pages}. {doi}  & {category}".format(  # NOQA
             code=tex_escape(this_row['NUM']),
             year=tex_escape(str(this_row['YEAR'])),
             title=tex_escape(this_row['TITLE']),
             authors=tex_escape(this_row['authors']),
-            href=self.href(this_row['DOI']),
-            journal=tex_escape(this_row['JOURNAL']),
+            doi=self.doi(this_row['DOI']),
+            href=self.href(this_row['Link']),
+            volume=tex_escape(this_row['VOL']),
+            pages=colonify(tex_escape(this_row['PAGES'])),
+            publisher=tex_escape(this_row['PUBLISHER']),
+            category=tex_escape(Categories[this_row['Type']])
+        )
+        row += "\\\\"
+        return row
+
+    def get_editors(self, editors):
+        if editors:
+            return editors + " (eds.)."
+        else:
+            return ""
+
+    def make_chapter(self, this_row):
+        row = ""
+        row += "{code} & {year} & {{\\bf {title}}}, {authors} & {editors} \\emph{{ {book} }}. {publisher} & {category}".format(  # NOQA
+            code=tex_escape(this_row['NUM']),
+            year=tex_escape(str(this_row['YEAR'])),
+            title=tex_escape(this_row['TITLE']),
+            authors=tex_escape(this_row['authors']),
+            editors=tex_escape(self.get_editors(this_row['editors'])),
+            book=tex_escape(this_row['Book Title']),
+            publisher=tex_escape(this_row['PUBLISHER']),
             category=tex_escape(Categories[this_row['Type']])
         )
         row += "\\\\"
@@ -305,18 +396,26 @@ class Courses(Table):
     def __init__(self, name='Courses', csv_file=None, cumulative=False):
         super(Courses, self).__init__(name=name, csv_file=csv_file)
         self.header_columns = ['Qtr', 'Course', 'Class Type',
-                               'Units', 'Hrs/Wk', 'Enrollment', 'Evals Available']
+                               'Units', 'Hrs/Wk', 'Enrollment',
+                               'ESCI/Written Evals Avail.']
         self.description = "UC Bio-bib Catalog Courses Table"
         self.cumulative = cumulative
         self.df = self.clean_df()
+        self.type = "longtable"
+        self.columns = "{lp{6.5cm}p{1cm}rrrp{2cm}}"
 
-    def begin_super_tabular(self):
-        # \begin{supertabular}{lp{6.5cm}lrrrc}
-        return "\\begin{supertabular}{lp{6.5cm}lrrrc}\n"
+    def clean_df(self):
+        df = self.df
+        df = df.sort_values(['Year', 'Q', 'Title'], ascending=[True, True, True])  # NOQA
+        return df
+
+    # def begin_super_tabular(self):
+    #     # \begin{supertabular}{lp{6.5cm}lrrrc}
+    #     return "\\begin{supertabular}{lp{6.5cm}p{1cm}rrrp{2cm}}\n"
 
     def make_row(self, this_row):
         row = ""
-        row += "{quarter} & {course}, {title} & {type} & {units} & {hrs_per_week} & {enrollment} & {evals} ".format(  # NOQA
+        row += "{quarter} & {course}, {title} & {type} & {units} & {hrs_per_week} & {enrollment} & {esci}/{evals} ".format(  # NOQA
                             quarter=tex_escape(this_row['QYR']),
                             course=tex_escape(str(this_row['Course'])),
                             title=tex_escape(this_row['Title']),
@@ -325,6 +424,7 @@ class Courses(Table):
                             hrs_per_week=tex_escape(
                                 this_row['Hours per Week']),
                             enrollment=tex_escape(this_row['Enrollment']),
+                            esci=tex_escape(this_row['ESCI']),
                             evals=tex_escape(this_row['Evals'])
                         )
         row += "\\\\"
@@ -340,10 +440,11 @@ class MESM(Table):
         self.description = "UC Bio-bib MESM Projects Table"
         self.cumulative = cumulative
         self.df = self.clean_df()
+        self.columns = "{p{1cm}p{2.5cm}p{3cm}p{2cm}p{2cm}p{2cm}p{2cm}}"
 
-    def begin_super_tabular(self):
-        # \begin{supertabular}{lp{6.5cm}lrrrc}
-        return "\\begin{supertabular}{lp{2.5cm}p{3cm}p{2cm}p{2cm}p{2cm}p{2cm}}\n"
+    # def begin_super_tabular(self):
+    #     # \begin{supertabular}{lp{6.5cm}lrrrc}
+    #     return "\\begin{supertabular}{p{1cm}p{2.5cm}p{3cm}p{2cm}p{2cm}p{2cm}p{2cm}}\n"
 
     def make_row(self, this_row):
         row = ""
@@ -373,6 +474,7 @@ class GraduateAdvising(Table):
                                'Instituion', 'Chair/Member', 'Current Employment']
         self.description = "UC Bio-bib Catalog GraduateAdvising Table"
         self.df = self.clean_df()
+        self.columns = "{lp{1.5cm} p{4.5cm}p{2cm}p{4cm}}"
 
     def clean_df(self):
         df = self.df
@@ -382,8 +484,8 @@ class GraduateAdvising(Table):
             by=['Year', 'Role', 'Student'], ascending=[True, True, True])
         return df
 
-    def begin_super_tabular(self):
-        return "\\begin{supertabular}{lp{1.5cm} p{3.5cm}p{2cm}p{4.5cm}}\n"
+    # def begin_super_tabular(self):
+    #     return "\\begin{supertabular}{lp{1.5cm} p{4.5cm}p{2cm}p{4cm}}\n"
 
     def make_row(self, this_row):
         row = ""
@@ -406,9 +508,11 @@ class PostdoctoralAdvising(Table):
         super(PostdoctoralAdvising, self).__init__(
             name=name, csv_file=csv_file)
         self.header_columns = [
-            'Postdoctoral Researcher', 'Years', 'Affiliation', 'Current Employment']
+            'Postdoctoral Researcher', 'Years',
+            'Affiliation', 'Current Employment']
         self.description = "UC Bio-bib Catalog Postdoctoral Advising Table"
         self.df = self.clean_df()
+        self.columns = "{lp{1.5cm} p{3.5cm}p{4.5cm}}"
 
     def clean_df(self, cumulative=False):
         df = self.df
@@ -417,8 +521,8 @@ class PostdoctoralAdvising(Table):
             df = df[df.Eval == 1]
         return df
 
-    def begin_super_tabular(self):
-        return "\\begin{supertabular}{lp{1.5cm} p{3.5cm}p{4.5cm}}\n"
+    # def begin_super_tabular(self):
+    #     return "\\begin{supertabular}{lp{1.5cm} p{3.5cm}p{4.5cm}}\n"
 
     def make_row(self, this_row):
         row = ""
@@ -439,30 +543,18 @@ class Lectures(Table):
 
     def __init__(self, name='Lectures', csv_file=None, cumulative=False):
         super(Lectures, self).__init__(name=name, csv_file=csv_file)
-        self.header_columns = ['Month/Year', 'Topic', 'Place/Conference']
+        self.header_columns = ['Month/Year', 'Title', 'Meeting/Place']
         self.description = "UC Bio-bib Lectures Table"
-        self.proceedings_file = 'CV/Conference Abstracts-Table.csv'
         self.cumulative = cumulative
-        self.conferences = Proceedings(
-            csv_file=self.proceedings_file,
-            name='Proceedings',
-            cumulative=self.cumulative)
         self.df = self.clean_df()
+        self.columns = "{lp{10.0cm}p{4.5cm}}"
 
     def clean_df(self, cumulative=False):
         df = self.df
-        df2 = self.conferences.df
         if cumulative is False:
             df = df[df.Eval == 1]
-        df2['Topic'] = df2['Title'] + ". " + df2['Authors']
-        df2['Place'] = df2['Conference']
-        df = df.append(df2)
         df = df.sort_values(by=['Year', 'Month'])
         return df
-
-    def begin_super_tabular(self):
-        # \begin{supertabular}{lp{6.5cm}lrrrc}
-        return "\\begin{supertabular}{lp{10.0cm}p{4.5cm}}\n"
 
     def make_row(self, this_row):
         row = ""
@@ -476,46 +568,39 @@ class Lectures(Table):
         return row
 
 
-class Proceedings(Table):
+class Proceedings(Lectures):
 
-    def __init__(self, name='Proceedings', csv_file=None, cumulative=True):
-        super(Proceedings, self).__init__(name=name, csv_file=csv_file)
-        self.header_columns = ['\\#', 'Year', 'Authors', 'Title', 'Venue']
+    def __init__(self, name='Proceedings', csv_file=None, cumulative=False):
+        super(Lectures, self).__init__(name=name, csv_file=csv_file)
+        self.header_columns = ['Month/Year', 'Title', 'Meeting/Place']
         self.description = "UC Bio-bib Proceedings Table"
         self.cumulative = cumulative
-        self.df = self.clean_df()
+        self.df = self.clean_df(cumulative=cumulative)
+        self.columns = "{lp{10.0cm}p{4.5cm}}"
 
-    def clean_df(self):
+    def clean_df(self, cumulative=False):
         df = self.df
-        if self.cumulative is False:
+        if cumulative is False:
             df = df[df.Eval == 1]
+        # df['Topic'] = df['Title'] + ". " + df['Authors']
         df = df.sort_values(by=['Year'], ascending=[True])
         df.Year = df.Year.astype(int)
         return df
 
-    def make_rows(self):
-        rows = []
-        df = self.df
-        old = df[df['Eval'] == 0]
-        new = df[df['Eval'] == 1]
-        for index, row in old.iterrows():
-            rows.append(self.make_row(row))
-        rows[-1] += '\\hline'
-        rows[-1] += '\\hline'
-        for index, row in new.iterrows():
-            rows.append(self.make_row(row))
-        return '\n'.join(rows)
-
-    def begin_super_tabular(self):
-        return "\\begin{supertabular}{llp{6cm}p{6cm}p{3cm}}\n"
+    def invited(self, this_row):
+        if this_row['Invited'] == 1:
+            return "(INVITED)"
+        else:
+            return ""
 
     def make_row(self, this_row):
         row = ""
-        row += "{code} & {year} & {authors} & {title} & {venue}".format(
-            code=tex_escape(this_row['CODE']),
+        row += " {month}/{year} & {{\\bf {title}}}. {authors} {invited} & {venue}".format(  # NOQA
             year=tex_escape(this_row['Year']),
-            authors=tex_escape(this_row['Authors']),
+            month=tex_escape(this_row['Month']),
+            invited=tex_escape(self.invited(this_row)),
             title=tex_escape(this_row['Title']),
+            authors=tex_escape(this_row['Authors']),
             venue=tex_escape(this_row['Conference'])
         )
         row += "\\\\"
@@ -526,31 +611,58 @@ class Funding(Table):
 
     def __init__(self, name='Funding', csv_file=None, cumulative=False):
         super(Funding, self).__init__(name=name, csv_file=csv_file)
-        self.header_columns = ['Year', 'Source', 'Title', 'Amount', 'Role']
+        self.header_columns = [
+            'Year', 'Source', 'Title',
+            'Role', 'Amount', 'Personal Share', 'New/Cont.'
+        ]
         self.description = "UC Bio-bib Funding Table"
         self.cumulative = cumulative
         self.df = self.clean_df()
+        self.columns = "{p{1.75cm}>{\\raggedright}p{2.75cm}p{5.5cm}p{1cm}p{1.25cm}p{1.25cm}p{1cm}}"  # NOQA
 
     def clean_df(self):
         df = self.df
         if self.cumulative is False:
             df = df[df.Eval == 1]
+        # Replace NaN with a 'nan' string for checking later
+        df['Start Date'].fillna('nan', inplace=True)
+        df['End Date'].fillna('nan', inplace=True)
+        # df.loc[df['Start Date'] == 'nan', 'Start Date'] = None
+        # df.loc[df['End Date'] == 'nan', 'End Date'] = None
         df = df.sort_values(by=['Start Year', 'Amount'],
                             ascending=[True, False])
         return df
 
-    def begin_super_tabular(self):
-        # \begin{supertabular}{lp{6.5cm}lrrrc}
-        return "\\begin{supertabular}{lp{3.5cm}p{7cm}ll}\n"
+    # def begin_super_tabular(self):
+    #     # \begin{supertabular}{lp{6.5cm}lrrrc}
+    #     return "\\begin{supertabular}{lp{3.5cm}p{7cm}ll}\n"
+
+    def make_role(self, row):
+        if row['Pooled Funds']:
+            return row['Role'] + " (pooled funds)"
+        else:
+            return row['Role']
+
+    def make_years(self, row):
+        if row['Start Date'] != 'nan' and row['End Date'] != 'nan':
+            return "{start}-{end}".format(
+                start=row['Start Date'],
+                end=row['End Date'])
+        else:
+            return "{start}-{end}".format(
+                start=row['Start Year'],
+                end=row['End Year'])
 
     def make_row(self, this_row):
         row = ""
-        row += "{year} & {source} & {title} & {amount} & {role} ".format(  # NOQA
-                            year=tex_escape(this_row['Start Year']),
+        row += "{year} & {source} & {title} & {role} & {amount} & {share} & {type}".format(  # NOQA
+                            year=tex_escape(self.make_years(this_row)),
                             source=tex_escape(str(this_row['Source'])),
                             title=tex_escape(this_row['Title']),
                             amount=tex_escape(this_row['Amount']),
-                            role=tex_escape(this_row['Role'])
+                            share=tex_escape(this_row['Personal Share']),
+                            role=tex_escape(self.make_role(this_row)),
+                            type=tex_escape(this_row['Type'])
                         )
         row += "\\\\"
         return row
@@ -564,6 +676,7 @@ class Reviews(Table):
         self.description = "UC Bio-bib Reveiwer Activity Table"
         self.cumulative = cumulative
         self.df = self.clean_df()
+        self.columns = "{llp{12cm}}"
 
     def clean_df(self):
         df = self.df
@@ -577,9 +690,9 @@ class Reviews(Table):
               )
         return df
 
-    def begin_super_tabular(self):
-        # \begin{supertabular}{lp{6.5cm}lrrrc}
-        return "\\begin{supertabular}{llp{12cm}}\n"
+    # def begin_super_tabular(self):
+    #     # \begin{supertabular}{lp{6.5cm}lrrrc}
+    #     return "\\begin{supertabular}{llp{12cm}}\n"
 
     def add_count(self, this_count=1):
         if this_count > 1:
