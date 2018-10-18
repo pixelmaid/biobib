@@ -26,7 +26,10 @@ Once the data are formatted properly, they are written out to `.tex` files, that
 
 ## Notes:
 
-1. I keep track of conference presentations separate from lectures and seminars. But apparently, these are considered the same thing in the UCSB biobib universe. So, when building the `Lectures.tex` file, I have to side-load the `Conference Abstract-Table.csv` during initialization of the `Lecture` object (cf. L401-404 in `tables.py`). This is super janky, but it works.
+1. ~I keep track of conference presentations separate from lectures and seminars. But apparently, these are considered the same thing in the UCSB biobib universe. So, when building the `Lectures.tex` file, I have to side-load the `Conference Abstract-Table.csv` during initialization of the `Lecture` object (cf. L401-404 in `tables.py`). This is super janky, but it works.~ 
+
+*Note to this Note*: I have now gone back to listing lectures in a table separately from the table containing conference proceedings. This works best in my disciplines, where the difference between O(A) seminars/invited keynotes and (B) submitted conference abstracts/presentations is substantial enough that they should not be combined. For now, it seems "legal" to keep them separated. Regardless, depending on your field and the nature of your work, you may want to check out an earlier commit that contained the "side-loading" approach refered to in the strikethrough text above. 
+
 
 2. While I tired to make the `tables.py` structure general and extensible, it's not really well factored, so there is a fair amount of repetition related to cleaning up dataframes and formating of table output.
 
