@@ -1,0 +1,12 @@
+% UC Bio-bib MESM Projects Table
+% Created on \VAR{created}
+
+\begin{longtable}{p{1cm}p{2.5cm}p{3cm}p{2cm}p{2cm}p{2cm}p{2cm}}
+Year & Project Title & Students & Q3 & Q4 & Q5 & Q7\\
+\hline 
+\endhead 
+\BLOCK{for project in items}
+\VAR{project.Year|tex_escape} & \VAR{project['Project Title']|tex_escape} & \VAR{project.Students|tex_escape} & \VAR{project.Q3|tex_escape} & \VAR{project.Q4|tex_escape} & \VAR{project.Q5|tex_escape} & \VAR{project.Q7|tex_escape} \\ 
+\BLOCK{endfor}
+\end{longtable}
+

@@ -1,0 +1,21 @@
+% UC Bio-bib Publication Table
+% Created on \VAR{created}
+
+\begin{longtable}{lcp{7.75cm}>{\raggedright}p{5.25cm}p{1.75cm}}
+\# & Year & Title and Authors & Publisher & Category\\
+\hline 
+\endhead 
+\BLOCK{for publication in items}
+\BLOCK{if publication['New'] != 'Y'}
+    \VAR{publication|make_row}
+\BLOCK{endif}
+\BLOCK{endfor}
+\\hline
+\\hline
+   &   & {\bf Since Appointment:} &    &   \\\\
+\BLOCK{for publication in items}
+\BLOCK{if publication['New'] == 'Y'}
+    \VAR{publication|make_row}
+\BLOCK{endif}
+\BLOCK{endfor}
+\end{longtable}

@@ -1,0 +1,12 @@
+% UC Bio-bib Catalog GraduateAdvising Table
+% Created on 2019-02-20 10:20
+
+\begin{longtable}{lp{1.5cm} p{4.5cm}p{2cm}p{4cm}}
+Student & Year & Instituion & Chair/Member & Current Employment\\
+\hline 
+\endhead 
+\BLOCK{for student in items}
+\VAR{student.Student|tex_escape} & \VAR{student.Year|tex_escape} & \VAR{student.Role|tex_escape} & \VAR{student.Title|tex_escape} \BLOCK{if student.Title and student.Organization} - \BLOCK{endif} \VAR{student.Organization|tex_escape} \\
+\BLOCK{endfor}
+\end{longtable}
+

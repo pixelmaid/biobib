@@ -1,0 +1,12 @@
+% UC Bio-bib Professional Generic Service Table
+% Created on \VAR{created}
+
+\begin{longtable}{llp{12cm}}
+Year & Role & Service\\
+\hline 
+\endhead 
+\BLOCK{for service in items}
+\VAR{service.Year} & \VAR{service.Role} & \VAR{service.Committee} \\
+\BLOCK{endfor}
+\end{longtable}
+

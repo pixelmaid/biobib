@@ -1,18 +1,20 @@
-Year,Q,Quarter,QYR,Course,Title,Class Type,IWC Equivalents,Units,Hours per Week,Enrollment,ESCI,Evals
-2018,2,Spring,S18,ESM 401A,Group Project - A,Lec,0.29,4,1,5,No,No
-2018,2,Spring,S18,ESM 401D,Group Project - D,Dis,0.13,2,1,4,No,No
-2018,2,Spring,S18,GEOG 200C,Intro to Geographical Research,Tut,0,2,1,1,No,No
-2018,2,Spring,S18,GEOG 597,Individual Study - PhD Exam,Tut,0,,2,1,No,No
-2018,2,Spring,S18,GEOG 599,PhD Dissertation,Tut,0,,2,1,No,No
-2018,1,Winter,W18,ESM 401C ,Group Project - C,Dis,0.29,4,1,4,No,No
-2018,1,Winter,W18,GEOG 597,Individual Study - PhD Exam,Tut,0,,2,1,No,No
-2018,1,Winter,W18,GEOG 599,PhD Dissertation,Tut,0,,2,1,No,No
-2017,4,Fall,F17,GEOG 597,Individual Study - PhD Exam,Tut,0,,2,2,No,No
-2017,4,Fall,F17,ESM 401B,Group Project - B,Dis,0.29,4,1,4,No,No
-2017,2,Spring,S17,ENV S 167,Biogoegraphy,Lec,0,4,3,17,Yes,Yes
-2017,2,Spring,S17,ESM 401A,Group Project - A,Lec,0.29,4,1,4,No,No
-2017,2,Spring ,S17,GEOG 167,Biogeography,Lec,1,4,3,12,Yes,Yes
-2017,2,Spring,S17,GEOG 200C,Intro to Geographical Research,Tut,0,2,1,1,No,No
-2017,2,Spring,S17,GEOG 597,Individual Study - PhD Exam,Tut,0,,2,2,No,No
-2017,1,Winter,W17,GEOG 597,Individual Study - PhD Exam,Tut,0,,2,1,No,No
-2016,4,Fall,F16,GEOG 597,Individual Study - PhD Exam,Tut, ,,2,1,No,No
+Year,Q,Quarter,QYR,Course,Title,Class Type,IWC Equivalents,Units,Hours per Week,Enrollment,ESCI,Evals,Eval
+2019,2,Spring,S19,G136,"Water, Energy, and Ecosystems",Lec,1,4,1,,Yes,Yes,1
+2018,3,Fall,F18,ESM 203,Earth System Science,Lec,0.5,4,1,,Yes,Yes,1
+2018,2,Spring,S18,ESM 401A,Group Project - A,Lec,0.29,4,1,5,No,No,1
+2018,2,Spring,S18,ESM 401D,Group Project - D,Dis,0.13,2,1,4,No,No,1
+2018,2,Spring,S18,GEOG 200C,Intro to Geographical Research,Tut,0,2,1,1,No,No,1
+2018,2,Spring,S18,GEOG 597,Individual Study - PhD Exam,Tut,0,,2,1,No,No,1
+2018,2,Spring,S18,GEOG 599,PhD Dissertation,Tut,0,,2,1,No,No,1
+2018,1,Winter,W18,ESM 401C ,Group Project - C,Dis,0.29,4,1,4,No,No,1
+2018,1,Winter,W18,GEOG 597,Individual Study - PhD Exam,Tut,0,,2,1,No,No,1
+2018,1,Winter,W18,GEOG 599,PhD Dissertation,Tut,0,,2,1,No,No,1
+2017,4,Fall,F17,GEOG 597,Individual Study - PhD Exam,Tut,0,,2,2,No,No,1
+2017,4,Fall,F17,ESM 401B,Group Project - B,Dis,0.29,4,1,4,No,No,1
+2017,2,Spring,S17,ENV S 167,Biogoegraphy,Lec,0,4,3,17,Yes,Yes,1
+2017,2,Spring,S17,ESM 401A,Group Project - A,Lec,0.29,4,1,4,No,No,1
+2017,2,Spring ,S17,GEOG 167,Biogeography,Lec,1,4,3,12,Yes,Yes,1
+2017,2,Spring,S17,GEOG 200C,Intro to Geographical Research,Tut,0,2,1,1,No,No,1
+2017,2,Spring,S17,GEOG 597,Individual Study - PhD Exam,Tut,0,,2,2,No,No,1
+2017,1,Winter,W17,GEOG 597,Individual Study - PhD Exam,Tut,0,,2,1,No,No,1
+2016,4,Fall,F16,GEOG 597,Individual Study - PhD Exam,Tut, ,,2,1,No,No,1

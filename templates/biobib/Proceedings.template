@@ -1,0 +1,12 @@
+% UC Bio-bib Proceedings Table
+% Created on \VAR{created}
+
+\begin{longtable}{lp{10.0cm}p{4.5cm}}
+Month/Year & Title & Meeting/Place\\
+\hline 
+\endhead
+\BLOCK{for abstract in items} 
+\VAR{abstract.Month|tex_escape}/\VAR{abstract.Year|tex_escape} & {\bf \VAR{abstract.Title|tex_escape}}. \VAR{abstract.Authors|tex_escape} \BLOCK{if abstract.Invited} (Invited) \BLOCK{endif} & \VAR{abstract.Conference|tex_escape} \\
+ \BLOCK{endfor}
+\end{longtable}
+

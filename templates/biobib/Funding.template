@@ -1,0 +1,12 @@
+% UC Bio-bib Funding Table
+% Created on \VAR{created}
+
+\begin{longtable}{p{1.75cm}>{\raggedright}p{2.75cm}p{5.5cm}p{1cm}p{1.25cm}p{1.25cm}p{1cm}}
+Year & Source & Title & Role & Amount & Personal Share & New/Cont.\\
+\hline 
+\endhead 
+\BLOCK{for item in funding}
+\VAR{item|make_years} & \VAR{item.Source|tex_escape} & \VAR{item.Title|tex_escape} & \VAR{item.Role|tex_escape} \BLOCK{if item['Pooled Fund']} (Pooled) \BLOCK{endif} & \VAR{item.Amount|tex_escape} & \VAR{item['Personal Share']|tex_escape} & \VAR{item.Type|tex_escape} \\ 
+\BLOCK{endfor}
+\end{longtable}
+

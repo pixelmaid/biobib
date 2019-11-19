@@ -1,0 +1,13 @@
+% UC Bio-bib Catalog Postdoctoral Advising Table
+% Created on \VAR{created}
+
+\begin{longtable}{lp{1.5cm} p{3.5cm}p{4.5cm}}
+Postdoctoral Researcher & Years & Affiliation & Current Employment\\
+\hline 
+\endhead 
+\BLOCK{for postdoc in items}
+\VAR{postdoc.Postdoc|tex_escape} & \VAR{postdoc['Start Year']|tex_escape} - \VAR{postdoc['End Year']|tex_escape} & \VAR{postdoc.Institution|tex_escape}, \VAR{postdoc.Department|tex_escape} & \VAR{postdoc.Title|tex_escape} - \VAR{postdoc.Organization|tex_escape}  \\
+\BLOCK{endfor}
+\end{longtable}
+
+

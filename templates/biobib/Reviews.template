@@ -1,0 +1,12 @@
+% UC Bio-bib Reveiwer Activity Table
+% Created on \VAR{created}
+
+\begin{longtable}{llp{12cm}}
+Year & Activity & Journal/Agency\\
+\hline 
+\endhead 
+\BLOCK{for review in items}
+\VAR{review.Year|tex_escape} & \VAR{review.Role|tex_escape} & \VAR{review['Journal or Agency']|tex_escape} \BLOCK{if review.count > 1} (\VAR{review.count|tex_escape}) \BLOCK{endif} \\
+\BLOCK{endfor}
+\end{longtable}
+

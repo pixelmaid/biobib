@@ -1,8 +1,11 @@
 % UC Bio-bib Publication Table
-% Created on 2019-11-19 10:42
+% Created on \VAR{created}
 
 \begin{longtable}{lcp{7.75cm}>{\raggedright}p{5.25cm}p{1.75cm}}
 \# & Year & Title and Authors & Publisher & Category\\
 \hline 
 \endhead 
+\BLOCK{for publication in items}
+    \VAR{publication|make_row}
+\BLOCK{endfor}
 \end{longtable}
