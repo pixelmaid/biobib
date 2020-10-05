@@ -276,12 +276,31 @@ class Publications(Table):
     def make_row(self, row):
         if row['Type'] == 'RA':
             return self.make_article(row)
+        elif row['Type'] == 'CD':
+            return self.make_demonstration(row)
         elif row['Type'] == 'BC':
             return self.make_chapter(row)
         elif row['Type'] == 'CP':
             return self.make_chapter(row)
 
     def make_article(self, this_row):
+        row = ""
+        row += "{code} & {year} & {{\\bf {title}}}, {authors}. {href} & \\emph{{ {publisher} }} {volume}{pages}. {doi}  & {category}".format(  # NOQA
+            code=tex_escape(this_row['NUM']),
+            year=tex_escape(str(this_row['YEAR'])),
+            title=tex_escape(this_row['TITLE']),
+            authors=tex_escape(this_row['authors']),
+            doi=self.doi(this_row['DOI']),
+            href=self.href(this_row['Link']),
+            volume=tex_escape(this_row['VOL']),
+            pages=colonify(tex_escape(this_row['PAGES'])),
+            publisher=tex_escape(this_row['PUBLISHER']),
+            category=tex_escape(self.category_lookup(this_row['Type']))
+        )
+        row += "\\\\"
+        return row
+
+    def make_demonstration(self, this_row):
         row = ""
         row += "{code} & {year} & {{\\bf {title}}}, {authors}. {href} & \\emph{{ {publisher} }} {volume}{pages}. {doi}  & {category}".format(  # NOQA
             code=tex_escape(this_row['NUM']),
