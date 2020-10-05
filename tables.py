@@ -254,6 +254,7 @@ class Publications(Table):
     def category_lookup(self, category):
         Categories = {
             'RA': 'Refereed Article',
+            'CD': 'Conference Demonstration',
             'CA': 'Conference Abstract',
             'BC': 'Refereed Book Chapter',
             'CP': 'Refereed Conference Proceedings'
