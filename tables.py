@@ -288,7 +288,7 @@ class Publications(Table):
         row = ""
         row += "{code} & {year} & {{\\bf {title}}}, {authors}. {href} & \\emph{{ {publisher} }} {volume}{pages}. {doi}  & {category}".format(  # NOQA
             code=tex_escape(this_row['NUM']),
-            year=tex_escape(str(this_row['YEAR'])),
+            year=tex_escape(str(round(this_row['YEAR']))),
             title=tex_escape(this_row['TITLE']),
             authors=tex_escape(this_row['authors']),
             doi=self.doi(this_row['DOI']),
