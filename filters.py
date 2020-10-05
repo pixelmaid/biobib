@@ -5,7 +5,8 @@ Categories = {
     'CD': 'Conference Demonstration',
     'CA': 'Conference Abstract',
     'BC': 'Refereed Book Chapter',
-    'CP': 'Refereed Conference Proceedings'
+    'CP': 'Refereed Conference Proceedings',
+    'MA': 'Magazine Article'
 }
 
 

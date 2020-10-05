@@ -257,7 +257,8 @@ class Publications(Table):
             'CD': 'Conference Demonstration',
             'CA': 'Conference Abstract',
             'BC': 'Refereed Book Chapter',
-            'CP': 'Refereed Conference Proceedings'
+            'CP': 'Refereed Conference Proceedings',
+            'MA': 'Magazine Article'
         }
         return Categories[category]
 
@@ -274,7 +275,7 @@ class Publications(Table):
             return "\\href{{{href}}}{{[pdf]}}".format(href=this_href)
 
     def make_row(self, row):
-        if row['Type'] == 'RA':
+        if row['Type'] == 'RA' or row['Type'] == 'CA' or row['Type'] == 'MA':
             return self.make_article(row)
         elif row['Type'] == 'CD':
             return self.make_demonstration(row)
