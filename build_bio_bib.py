@@ -23,10 +23,10 @@ Submitted(category='R', name='Submitted',
 # EXHIBITION ACTIVITIES
 #
 ###############################################################################
-#from tables import Exhibitions  # NOQA
-#exhibition_file = 'CV/Exhibitions-Table.csv'
-#Exhibitions(category='P', name='Exhibitions',
-             #csv_file=exhibition_file).write_template(path=path)
+from tables import Exhibitions  # NOQA
+exhibition_file = 'CV/Exhibitions-Table.csv'
+Exhibitions(category='P', name='Exhibitions',
+             csv_file=exhibition_file).write_template(path=path)
 
 
 ###############################################################################
