@@ -291,7 +291,7 @@ class Publications(Table):
             year=tex_escape(str(round(this_row['YEAR']))),
             title=tex_escape(this_row['TITLE']),
             authors=tex_escape(this_row['authors']),
-            #doi=self.doi(this_row['DOI']),
+            doi=self.doi(this_row['DOI']),
             href=self.href(this_row['Link']),
             volume=tex_escape(this_row['VOL']),
             pages=colonify(tex_escape(this_row['PAGES'])),
