@@ -11,9 +11,9 @@
 \BLOCK{endif}
 \BLOCK{endfor}
 
-\hline
- \multicolumn{5}{l}{\bf \cellcolor{yellow!25}Current Review Period Begins Here, July 15th 2019 to September 15th 2020}\\
-   \hline  
+%\hline
+ %\multicolumn{5}{l}{\bf \cellcolor{yellow!25}Current Review Period Begins Here, July 15th 2019 to September 15th 2020}\\
+%  \hline  
 \BLOCK{for publication in items}
 \BLOCK{if publication['New'] == 'Y'}
     \VAR{publication|make_row}
