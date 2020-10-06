@@ -229,7 +229,7 @@ class Publications(Table):
         # Step 2: Concatenate authors into a single list, making sure to drop
         # empty author columns
         df['authors'] = list(
-            pd.Series(df[['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12', 'A13']]  # NOQA
+            pd.Series(df[['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15']]  # NOQA
                       .fillna('').values.tolist())
             .apply(lambda x: [i for i in x if i != ''])
             .apply(lambda x: ', '.join(x))
@@ -291,7 +291,7 @@ class Publications(Table):
             year=tex_escape(str(round(this_row['YEAR']))),
             title=tex_escape(this_row['TITLE']),
             authors=tex_escape(this_row['authors']),
-            doi=self.doi(this_row['DOI']),
+            #doi=self.doi(this_row['DOI']),
             href=self.href(this_row['Link']),
             volume=tex_escape(this_row['VOL']),
             pages=colonify(tex_escape(this_row['PAGES'])),
