@@ -340,6 +340,65 @@ class Publications(Table):
         return row
 
 
+class Exhibitions(Table):
+
+    def __init__(
+            self,
+            name='Exhibitions',
+            csv_file=None,
+            category='P',
+            template_file='biobib/Exhibitions.template'):
+        self.filters = {
+            'make_row': self.make_row
+        }
+        super(Exhibitions, self).__init__(
+            name=name, csv_file=csv_file, template_file=template_file, filters=self.filters)
+        self.category = category
+        self.cumulative = True  # Always provide complete publication list
+        self.df = self.clean_df()
+        
+    def clean_df(self):
+        df = self.df
+        df = self.clean_cumulative(df)
+        # Step 1: drop any papers not published
+        df = df[df.S == self.category]
+        # Step 2: Concatenate authors into a single list, making sure to drop
+        # empty author columns
+        df['authors'] = list(
+            pd.Series(df[['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15']]  # NOQA
+                      .fillna('').values.tolist())
+            .apply(lambda x: [i for i in x if i != ''])
+            .apply(lambda x: ', '.join(x))
+        )
+        return df
+
+    def category_lookup(self, category):
+        Categories = {
+            'AE': 'Artwork and Exhibition',
+            'AP': 'Artwork and Performance',
+            'A': 'Animation'
+        }
+        return Categories[category]
+
+
+    def make_row(self, row):
+        if row['Type'] == 'AE' or row['Type'] == 'AP' or row['Type'] == 'A':
+            return self.make_article(row)
+
+    def make_article(self, this_row):
+        row = ""
+        row += "{code} & {year} & {{\\bf {title}}}, {authors}. & \\emph{{ {publisher} }}.  & {category}".format(  # NOQA
+            code=tex_escape(this_row['NUM']),
+            year=tex_escape(str(round(this_row['YEAR']))),
+            title=tex_escape(this_row['TITLE']),
+            authors=tex_escape(this_row['authors']),
+            #doi=self.doi(this_row['DOI']),
+            publisher=tex_escape(this_row['PUBLISHER']),
+            category=tex_escape(self.category_lookup(this_row['Type']))
+        )
+        row += "\\\\"
+        return row
+
 class InPress(Publications):
 
     def __init__(self, name='InPress',

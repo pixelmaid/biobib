@@ -1,0 +1,22 @@
+% UC Bio-bib Exhibitions Table
+% Created on \VAR{created}
+
+\begin{longtable}{lcp{7.75cm}>{\raggedright}p{5.25cm}p{1.75cm}}
+\# & Year & Title and Authors & Publisher & Category\\
+\hline 
+\endhead 
+\BLOCK{for publication in items}
+\BLOCK{if publication['New'] != 'Y'}
+    \VAR{publication|make_row}
+\BLOCK{endif}
+\BLOCK{endfor}
+
+\hline
+ \multicolumn{5}{l}{\bf \cellcolor{yellow!25}Current Review Period Begins Here, July 15th 2019 to September 15th 2020}\\
+   \hline  
+\BLOCK{for publication in items}
+\BLOCK{if publication['New'] == 'Y'}
+    \VAR{publication|make_row}
+\BLOCK{endif}
+\BLOCK{endfor}
+\end{longtable}
