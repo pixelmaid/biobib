@@ -420,7 +420,7 @@ class Submitted(Publications):
 
 class Courses(Table):
 
-    def __init__(self, name='Courses', csv_file=None, cumulative=False,
+    def __init__(self, name='Courses', csv_file=None, cumulative=True,
             template_file='biobib/Courses.template'):
         super(Courses, self).__init__(
             name=name, csv_file=csv_file, template_file=template_file)
@@ -439,6 +439,7 @@ class Courses(Table):
         # Step 1: drop any service from before this eval period
         df = self.clean_cumulative(df)
         df = df.sort_values(['Year', 'Q', 'Title'], ascending=[True, True, True])  # NOQA
+
         return df
 
 class MESM(Table):
